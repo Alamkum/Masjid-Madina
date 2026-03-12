@@ -1,0 +1,177 @@
+body{
+
+margin:0;
+font-family:Arial;
+color:white;
+text-align:center;
+background:linear-gradient(#020111,#191621);
+
+}
+
+/* तारे */
+
+body::before{
+
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:url("https://i.imgur.com/YKY28eT.png");
+animation:stars 60s linear infinite;
+opacity:0.5;
+.gallery-container{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+}
+
+@keyframes stars{
+
+from{background-position:0 0;}
+to{background-position:10000px 5000px;}
+
+}
+
+header{
+
+padding:80px 20px;
+
+}
+
+header h1{
+
+font-size:55px;
+color:gold;
+text-shadow:0 0 20px gold;
+
+}
+
+header p{
+
+font-size:20px;
+
+}
+
+/* चाँद animation */
+
+.moon{
+
+position:absolute;
+font-size:40px;
+left:-50px;
+top:40px;
+animation:moonmove 12s linear infinite;
+
+}
+
+@keyframes moonmove{
+
+0%{left:-50px;}
+50%{left:100%;}
+100%{left:-50px;}
+
+}
+
+/* नमाज़ कार्ड */
+
+.namaz{
+
+padding:40px;
+
+}
+
+.card{
+
+background:rgba(255,255,255,0.1);
+margin:15px auto;
+padding:15px;
+width:220px;
+border-radius:10px;
+font-size:20px;
+box-shadow:0 0 15px rgba(255,255,255,0.3);
+
+}
+
+footer{
+
+margin-top:40px;
+padding:20px;
+background:#0b7a48;
+
+}
+.gallery-container{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.gallery-img{
+  width:200px;
+  margin:10px;
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(255,255,255,0.3);
+  transition:transform 0.3s;
+}
+
+.gallery-img:hover{
+  transform:scale(1.1);
+}
+/* Navbar Styles */
+.navbar{
+  position: sticky;        /* page scroll पर navbar ऊपर रहेगा */
+  top: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Navbar list - horizontal */
+.navbar ul{
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;          /* small screen friendly */
+}
+
+/* Navbar list items */
+.navbar ul li{
+  margin: 0 15px;
+}
+
+/* Navbar links */
+.navbar ul li a{
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+/* Hover effect */
+.navbar ul li a:hover{
+  background: gold;
+  color: black;
+}
+
+/* Active link highlight (optional) */
+.navbar ul li a.active{
+  background: white;
+  color: black;
+}
+
+/* Mobile responsiveness - stack items */
+@media screen and (max-width: 600px){
+  .navbar ul{
+    flex-direction: row;
+  }
+  .navbar ul li{
+    margin: 8px 0;
+  }
+}

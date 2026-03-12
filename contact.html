@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Team</title>
+
+<style>
+/* =========================
+   General Body Styling
+========================= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+}
+
+/* =========================
+   Navbar
+========================= */
+.navbar {
+    background-color: #0b3d2e;
+    padding: 10px 0;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+.navbar ul li {
+    margin: 0 15px;
+}
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+}
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   Contact Cards
+========================= */
+.contact-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px;
+}
+
+.contact-card {
+    width: 250px; /* thoda bada width */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.contact-card img {
+    width: 100%;       /* Full width of card */
+    height: 250px;     /* Fixed height for uniformity */
+    object-fit: cover; /* Maintain aspect ratio, crop if needed */
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.contact-card h3 {
+    margin: 10px 0 5px 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.contact-card p {
+    margin: 5px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+/* =========================
+   Footer
+========================= */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #0b3d2e;
+    color: white;
+    margin-top: 20px;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media(max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+    }
+    .navbar ul li {
+        margin: 5px 0;
+    }
+    .contact-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .contact-card {
+        width: 80%;
+    }
+    .contact-card img {
+        height: auto; /* mobile me height automatic ho jaaye */
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="surah.html">Namaj</a></li>
+<li><a href="gallery.html">Gallery</a></li>
+<li><a href="contact.html">Contact</a></li>
+<li><a href="recodes.html">RecodesCheck</a></li>
+</ul>
+</nav>
+
+<h1 style="text-align:center;">Contact Team</h1>
+
+<div class="contact-container">
+
+<div class="contact-card">
+<img src="images/person1.jpg" alt="Ali">
+<h3>Ali Khan</h3>
+<p>📞 +91 9876543210</p>
+<p>Work: Event Coordinator</p>
+</div>
+
+<div class="contact-card">
+<img src="images/person2.jpg" alt="Fatima">
+<h3>Fatima Begum</h3>
+<p>📞 +91 9123456780</p>
+<p>Work: Volunteer Manager</p>
+</div>
+
+<div class="contact-card">
+<img src="images/person3.jpg" alt="Imran">
+<h3>Imran Sheikh</h3>
+<p>📞 +91 9988776655</p>
+<p>Work: IT Support</p>
+</div>
+
+</div>
+
+<footer>© 2026 मदीना मस्जिद सिरसिया नं.3</footer>
+
+</body>
+</html>

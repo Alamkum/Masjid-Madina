@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Annual Payment Record</title>
+
+<style>
+/* =========================
+   General Body Styling
+========================= */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #f4f6f8;
+    color: #222;
+}
+
+/* =========================
+   Navbar
+========================= */
+.navbar {
+    background-color: #0b3d2e;
+    padding: 10px 0;
+}
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+.navbar ul li {
+    margin: 0 15px;
+}
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+}
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   Table Styling
+========================= */
+#paymentTable {
+    border-collapse: collapse;
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#paymentTable th, #paymentTable td {
+    border: 1px solid #555;
+    padding: 8px;
+    text-align: center;
+}
+
+#paymentTable th {
+    background-color: #eee;
+    font-weight: bold;
+}
+
+/* Highlight editable cells (optional) */
+#paymentTable td.jama, #paymentTable td.baki, #paymentTable td.adwans {
+    background-color: #f9f9f9;
+}
+
+/* =========================
+   Buttons & Select (future) 
+========================= */
+button, select {
+    display: block;
+    margin: 10px auto;
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0b3d2e;
+    color: white;
+}
+
+/* =========================
+   Footer
+========================= */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #0b3d2e;
+    color: white;
+    margin-top: 20px;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media(max-width: 768px) {
+    #paymentTable {
+        width: 100%;
+    }
+    .navbar ul {
+        flex-direction: column;
+    }
+    .navbar ul li {
+        margin: 5px 0;
+    }
+}
+</style>
+
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="surah.html">Namaj</a></li>
+<li><a href="contact.html">Contact</a></li>
+<li><a href="recodes.html">Recodes Check</a></li>
+</ul>
+</nav>
+
+<h2 style="text-align:center;">Annual Payment Record</h2>
+
+<table id="paymentTable">
+<thead>
+<tr>
+<th>Month</th>
+<th>Name</th>
+<th>Jama</th>
+<th>Baki</th>
+<th>Advance</th>
+</tr>
+</thead>
+<tbody>
+<tr data-month="January">
+<td>January</td>
+<td>Ram</td>
+<td class="jama">0</td>
+<td class="baki">0</td>
+<td class="adwans">0</td>
+</tr>
+<tr data-month="January">
+<td>January</td>
+<td>Shyam</td>
+<td class="jama">0</td>
+<td class="baki">0</td>
+<td class="adwans">0</td>
+</tr>
+<tr data-month="February">
+<td>February</td>
+<td>Ram</td>
+<td class="jama">0</td>
+<td class="baki">0</td>
+<td class="adwans">0</td>
+</tr>
+<tr data-month="February">
+<td>February</td>
+<td>Shyam</td>
+<td class="jama">0</td>
+<td class="baki">0</td>
+<td class="adwans">0</td>
+</tr>
+</tbody>
+</table>
+
+<footer>© 2026 मदीना मस्जिद सिरसिया नं.3</footer>
+
+</body>
+</html>
