@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Record Checker (CSV)</title>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0 20px;
+    background: #f9f9f9;
+    color: #333;
+}
+h2 { text-align:center; color:#2c3e50; margin-top:20px; }
+h3 { color:#27ae60; margin-top:25px; }
+h4 { color:#e67e22; margin-top:10px; }
+input, select {
+    padding:10px; margin:5px; border-radius:5px; border:1px solid #ccc;
+}
+button {
+    padding:10px 15px; border:none; border-radius:5px;
+    background:#3498db; color:white; cursor:pointer;
+}
+button:hover { background:#2980b9; }
+table {
+    width: 90%; margin: 20px auto; border-collapse: collapse;
+    background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+th, td { border:1px solid #ddd; padding:8px; text-align:center; }
+th { background-color: #3498db; color:white; }
+tr:nth-child(even) { background:#f2f2f2; }
+#paymentTable th, #paymentTable td { border: 1px solid #555; }
+#paymentTable td.jama, #paymentTable td.baki, #paymentTable td.adwans { background-color: #f9f9f9; }
+footer { text-align: center; padding: 15px; background-color: #0b3d2e; color: white; width: 100%; margin-top: 40px; box-sizing: border-box;}
+</style>
+</head>
+<body>
+
+<h2>Online Record Checker (CSV)</h2>
+
+<input type="text" id="numberInput" placeholder="Enter Number or Mobile">
+
+<select id="monthSelect">
+    <option value="">All Months</option>
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+</select>
+
+<button onclick="filterRecords()">Show Records</button>
+<a href="index.html"><button>🏠 Home</button></a>
+
+<div id="recordsContainer"></div>
+
+<h2 style="text-align:center;">Annual Payment Record</h2>
+
+<table id="paymentTable">
+<thead>
+<tr>
+<th>Name</th>
+<th>Year</th>
+<th>Month</th>
+<th>Jama</th>
+<th>Baki</th>
+<th>Advance</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<footer>© 2026 मदीना मस्जिद सिरसिया नं.3</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+let csvData = [];
+const monthNames = {
+    "01":"January","02":"February","03":"March","04":"April",
+    "05":"May","06":"June","07":"July","08":"August",
+    "09":"September","10":"October","11":"November","12":"December"
+};
+
+const API_URL = "https://raw.githubusercontent.com/yourusername/yourrepo/main/records.csv";
+
+Papa.parse(API_URL, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results){
+        csvData = results.data;
+        console.log("CSV loaded successfully!");
+    },
+    error: function(err){ alert("Error loading CSV: "+err);}
+});
+
+function filterRecords(){
+    const input = document.getElementById('numberInput').value.trim();
+    const selectedMonth = document.getElementById('monthSelect').value;
+    const container = document.getElementById('recordsContainer');
+    container.innerHTML = "";
+
+    if(!input){ alert("Enter Number or Mobile"); return; }
+
+    let filteredData = csvData.filter(row => row.Number === input || row.Mobile === input);
+
+    if(selectedMonth){
+        filteredData = filteredData.filter(row => {
+            return row.Month.toLowerCase() === monthNames[selectedMonth].toLowerCase();
+        });
+    }
+
+    if(filteredData.length === 0){ container.innerHTML = "<p>No records found</p>"; return; }
+
+    filteredData.sort((a,b)=>{
+        if(Number(a.Year) === Number(b.Year)) return new Date("1 "+a.Month+" "+a.Year) - new Date("1 "+b.Month+" "+b.Year);
+        return Number(a.Year)-Number(b.Year);
+    });
+
+    let totalJama=0, totalBaki=0, totalAdvance=0;
+    const years = [...new Set(filteredData.map(r=>r.Year))];
+
+    years.forEach(year=>{
+        const yearRecords = filteredData.filter(r=>r.Year===year);
+        const h3 = document.createElement('h3'); h3.textContent="Records "+year; container.appendChild(h3);
+        const months = [...new Set(yearRecords.map(r=>r.Month))];
+        months.forEach(month=>{
+            const monthRecords = yearRecords.filter(r=>r.Month===month);
+            const h4 = document.createElement('h4'); h4.textContent="Month: "+month; container.appendChild(h4);
+
+            let monthJama=0, monthBaki=0, monthAdvance=0;
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const trHead = document.createElement('tr');
+            Object.keys(monthRecords[0]).forEach(key=>{ const th=document.createElement('th'); th.textContent=key; trHead.appendChild(th); });
+            thead.appendChild(trHead); table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+
+            monthRecords.forEach(row=>{
+                const tr = document.createElement('tr');
+                totalJama+=Number(row.Jama||0); totalBaki+=Number(row.Baki||0); totalAdvance+=Number(row.Advance||0);
+                monthJama+=Number(row.Jama||0); monthBaki+=Number(row.Baki||0); monthAdvance+=Number(row.Advance||0);
+                Object.values(row).forEach(val=>{ const td=document.createElement('td'); td.textContent=val; tr.appendChild(td); });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody); container.appendChild(table);
+
+            const monthSummary = document.createElement('p');
+            monthSummary.innerHTML=`<b>Month Total →</b> Jama: ${monthJama} | Baki: ${monthBaki} | Advance: ${monthAdvance}`;
+            container.appendChild(monthSummary);
+        });
+    });
+
+    const summary = document.createElement('div');
+    summary.innerHTML=`<h3 style="color:#2c3e50;">Grand Total</h3>
+                       <p><b>Total Jama:</b> ${totalJama}</p>
+                       <p><b>Total Baki:</b> ${totalBaki}</p>
+                       <p><b>Total Advance:</b> ${totalAdvance}</p>`;
+    container.appendChild(summary);
+}
+</script>
+
+</body>
+</html>
