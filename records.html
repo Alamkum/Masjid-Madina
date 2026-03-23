@@ -1,197 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Online Record Checker (CSV)</title>
+<title>Online Record Checker (CSV) - Responsive Wide Table</title>
 <style>
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 20px;
-    background: #f9f9f9;
-    color: #333;
+    margin: 0; padding: 0 20px;
+    background: #f9f9f9; color: #333;
 }
 h2 { text-align:center; color:#2c3e50; margin-top:20px; }
-h3 { color:#27ae60; margin-top:25px; }
-h4 { color:#e67e22; margin-top:10px; }
-input, select {
-    padding:10px; margin:5px; border-radius:5px; border:1px solid #ccc;
-}
-button {
-    padding:10px 15px; border:none; border-radius:5px;
-    background:#3498db; color:white; cursor:pointer;
-}
+input, select { padding:10px; margin:5px; border-radius:5px; border:1px solid #ccc; }
+button { padding:10px 15px; border:none; border-radius:5px; background:#3498db; color:white; cursor:pointer; }
 button:hover { background:#2980b9; }
+
+#topControls { text-align:center; margin-top:15px; }
+#recordsContainer { overflow-x: auto; margin-top: 20px; }
+
 table {
-    width: 90%; margin: 20px auto; border-collapse: collapse;
-    background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 100%; border-collapse: collapse; min-width: 900px; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 th, td { border:1px solid #ddd; padding:8px; text-align:center; }
-th { background-color: #3498db; color:white; }
+th { background:#3498db; color:white; position: sticky; top: 0; }
 tr:nth-child(even) { background:#f2f2f2; }
-#paymentTable th, #paymentTable td { border: 1px solid #555; }
-#paymentTable td.jama, #paymentTable td.baki, #paymentTable td.adwans { background-color: #f9f9f9; }
-footer { text-align: center; padding: 15px; background-color: #0b3d2e; color: white; width: 100%; margin-top: 40px; box-sizing: border-box;}
+
+footer { text-align:center; padding:15px; background-color:#0b3d2e; color:white; margin-top:40px; width:100%; box-sizing:border-box;}
 </style>
 </head>
 <body>
 
 <h2>Online Record Checker (CSV)</h2>
 
-<input type="text" id="numberInput" placeholder="Enter Number or Mobile">
-
-<select id="monthSelect">
-    <option value="">All Months</option>
-    <option value="01">January</option>
-    <option value="02">February</option>
-    <option value="03">March</option>
-    <option value="04">April</option>
-    <option value="05">May</option>
-    <option value="06">June</option>
-    <option value="07">July</option>
-    <option value="08">August</option>
-    <option value="09">September</option>
-    <option value="10">October</option>
-    <option value="11">November</option>
-    <option value="12">December</option>
-</select>
-
-<button onclick="filterRecords()">Show Records</button>
-<a href="index.html"><button>🏠 Home</button></a>
+<div id="topControls">
+    <input type="text" id="numberInput" placeholder="Enter Number or Mobile">
+    <select id="yearSelect">
+        <option value="">All Years</option>
+    </select>
+    <button onclick="filterRecords()">Show Record</button>
+    <button onclick="goHome()">🏠 Home</button>
+</div>
 
 <div id="recordsContainer"></div>
-
-<h2 style="text-align:center;">Annual Payment Record</h2>
-<table id="paymentTable">
-<thead>
-<tr>
-<th>Month</th>
-<th>Name</th>
-<th>Jama</th>
-<th>Baki</th>
-<th>Advance</th>
-</tr>
-</thead>
-<tbody>
-<tr data-month="January">
-<td>January</td>
-<td>Ram</td>
-<td class="jama">0</td>
-<td class="baki">0</td>
-<td class="adwans">0</td>
-</tr>
-<tr data-month="January">
-<td>January</td>
-<td>Shyam</td>
-<td class="jama">0</td>
-<td class="baki">0</td>
-<td class="adwans">0</td>
-</tr>
-<tr data-month="February">
-<td>February</td>
-<td>Ram</td>
-<td class="jama">0</td>
-<td class="baki">0</td>
-<td class="adwans">0</td>
-</tr>
-<tr data-month="February">
-<td>February</td>
-<td>Shyam</td>
-<td class="jama">0</td>
-<td class="baki">0</td>
-<td class="adwans">0</td>
-</tr>
-</tbody>
-</table>
 
 <footer>© 2026 मदीना मस्जिद सिरसिया नं.3</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script>
 let csvData = [];
-const monthNames = {
-    "01":"January","02":"February","03":"March","04":"April",
-    "05":"May","06":"June","07":"July","08":"August",
-    "09":"September","10":"October","11":"November","12":"December"
-};
+const CSV_URL = "https://raw.githubusercontent.com/Alamkum/Masjid-Madina/main/records.csv";
 
-const API_URL = "https://raw.githubusercontent.com/Alamkum/Masjid-Madina/main/records.csv";
-
-Papa.parse(API_URL, {
+// Load CSV
+Papa.parse(CSV_URL, {
     download: true,
     header: true,
     skipEmptyLines: true,
     complete: function(results){
         csvData = results.data;
-        console.log("CSV loaded successfully!");
+        populateYearOptions();
+        console.log("CSV loaded:", csvData);
     },
     error: function(err){ alert("Error loading CSV: "+err);}
 });
 
+// Populate year dropdown
+function populateYearOptions(){
+    const years = [...new Set(csvData.map(r=>r.Year))].sort();
+    const yearSelect = document.getElementById('yearSelect');
+    years.forEach(y => {
+        const opt = document.createElement('option'); opt.value = y; opt.textContent = y;
+        yearSelect.appendChild(opt);
+    });
+}
+
+// Filter and render
 function filterRecords(){
     const input = document.getElementById('numberInput').value.trim();
-    const selectedMonth = document.getElementById('monthSelect').value;
+    const selectedYear = document.getElementById('yearSelect').value;
     const container = document.getElementById('recordsContainer');
     container.innerHTML = "";
 
-    if(!input){ alert("Enter Number or Mobile"); return; }
+    let filtered = csvData;
+    if(input) filtered = filtered.filter(r => r.Number === input || r.Mobile === input);
+    if(selectedYear) filtered = filtered.filter(r => r.Year === selectedYear);
 
-    let filteredData = csvData.filter(row => row.Number === input || row.Mobile === input);
+    if(filtered.length === 0){ container.innerHTML = "<p>No records found</p>"; return; }
 
-    if(selectedMonth){
-        filteredData = filteredData.filter(row => {
-            return row.Month.toLowerCase() === monthNames[selectedMonth].toLowerCase();
-        });
-    }
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-    if(filteredData.length === 0){ container.innerHTML = "<p>No records found</p>"; return; }
-
-    filteredData.sort((a,b)=>{
-        if(Number(a.Year) === Number(b.Year)) return new Date("1 "+a.Month+" "+a.Year) - new Date("1 "+b.Month+" "+b.Year);
-        return Number(a.Year)-Number(b.Year);
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const trHead = document.createElement('tr');
+    ["Number","Name","Mobile","Year", ...months, "Jama","Baki","Advance"].forEach(h=>{
+        const th = document.createElement('th'); th.textContent = h; trHead.appendChild(th);
     });
+    thead.appendChild(trHead); table.appendChild(thead);
 
-    let totalJama=0, totalBaki=0, totalAdvance=0;
-    const years = [...new Set(filteredData.map(r=>r.Year))];
-
-    years.forEach(year=>{
-        const yearRecords = filteredData.filter(r=>r.Year===year);
-        const h3 = document.createElement('h3'); h3.textContent="Records "+year; container.appendChild(h3);
-        const months = [...new Set(yearRecords.map(r=>r.Month))];
-        months.forEach(month=>{
-            const monthRecords = yearRecords.filter(r=>r.Month===month);
-            const h4 = document.createElement('h4'); h4.textContent="Month: "+month; container.appendChild(h4);
-
-            let monthJama=0, monthBaki=0, monthAdvance=0;
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            const trHead = document.createElement('tr');
-            Object.keys(monthRecords[0]).forEach(key=>{ const th=document.createElement('th'); th.textContent=key; trHead.appendChild(th); });
-            thead.appendChild(trHead); table.appendChild(thead);
-            const tbody = document.createElement('tbody');
-
-            monthRecords.forEach(row=>{
-                const tr = document.createElement('tr');
-                totalJama+=Number(row.Jama||0); totalBaki+=Number(row.Baki||0); totalAdvance+=Number(row.Advance||0);
-                monthJama+=Number(row.Jama||0); monthBaki+=Number(row.Baki||0); monthAdvance+=Number(row.Advance||0);
-                Object.values(row).forEach(val=>{ const td=document.createElement('td'); td.textContent=val; tr.appendChild(td); });
-                tbody.appendChild(tr);
-            });
-            table.appendChild(tbody); container.appendChild(table);
-
-            const monthSummary = document.createElement('p');
-            monthSummary.innerHTML=`<b>Month Total →</b> Jama: ${monthJama} | Baki: ${monthBaki} | Advance: ${monthAdvance}`;
-            container.appendChild(monthSummary);
-        });
+    const tbody = document.createElement('tbody');
+    filtered.forEach(row=>{
+        const tr = document.createElement('tr');
+        tr.appendChild(td(row.Number));
+        tr.appendChild(td(row.Name));
+        tr.appendChild(td(row.Mobile));
+        tr.appendChild(td(row.Year));
+        months.forEach(m => tr.appendChild(td(row[m] || "")));
+        tr.appendChild(td(row.Jama || ""));
+        tr.appendChild(td(row.Baki || ""));
+        tr.appendChild(td(row.Advance || ""));
+        tbody.appendChild(tr);
     });
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
 
-    const summary = document.createElement('div');
-    summary.innerHTML=`<h3 style="color:#2c3e50;">Grand Total</h3>
-                       <p><b>Total Jama:</b> ${totalJama}</p>
-                       <p><b>Total Baki:</b> ${totalBaki}</p>
-                       <p><b>Total Advance:</b> ${totalAdvance}</p>`;
-    container.appendChild(summary);
+function td(val){ const cell = document.createElement('td'); cell.textContent = val; return cell; }
+
+// Home button
+function goHome(){
+    window.location.href = "index.html"; // या अपनी home page का URL डालें
 }
 </script>
 
