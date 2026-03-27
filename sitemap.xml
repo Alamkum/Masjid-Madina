@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Home Page -->
   <url>
-    <loc>https://alamkum.github.io/Masjid-Madina/index.html</loc>
-    <lastmod>2026-03-12</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://alamkum.github.io/Masjid-Madina/</loc>
+    <lastmod>2026-03-27</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-  </url>
-
-  <!-- Namaj Page -->
-  <url>
-    <loc>https://alamkum.github.io/Masjid-Madina/surah.html</loc>
-    <lastmod>2026-03-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <!-- Contact Page -->
   <url>
     <loc>https://alamkum.github.io/Masjid-Madina/contact.html</loc>
-    <lastmod>2026-03-12</lastmod>
+    <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <!-- Records Page -->
   <url>
-    <loc>https://alamkum.github.io/Masjid-Madina/recodes.html</loc>
-    <lastmod>2026-03-12</lastmod>
+    <loc>https://alamkum.github.io/Masjid-Madina/records.html</loc>
+    <lastmod>2026-03-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
