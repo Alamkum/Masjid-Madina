@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>मदीना मस्जिद चेक रिकॉर्ड - Record Checker</title>
+
+<meta name="description" content="मदीना मस्जिद सिरसिया नं.3 का ऑनलाइन रिकॉर्ड चेक करें। नाम, मोबाइल या नंबर से जानकारी देखें।">
+<meta name="keywords" content="Masjid Record, Sirsiya No 3, Deoria, Online Record">
+<meta name="author" content="Madina Masjid">
+
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0 20px;
+    background: #f9f9f9; color: #333;
+}
+
+h1 { text-align:center; color:#0b3d2e; }
+h2 { text-align:center; color:#2c3e50; }
+
+input, select {
+    padding:10px; margin:5px;
+    border-radius:5px; border:1px solid #ccc;
+}
+
+button {
+    padding:10px 15px;
+    border:none;
+    border-radius:5px;
+    background:#3498db;
+    color:white;
+    cursor:pointer;
+}
+button:hover { background:#2980b9; }
+
+#topControls {
+    text-align:center;
+    margin-top:15px;
+    background:#fff;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+#recordsContainer { overflow-x: auto; margin-top: 20px; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+    background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+th, td {
+    border:1px solid #ddd;
+    padding:8px;
+    text-align:center;
+}
+
+th {
+    background:#3498db;
+    color:white;
+    position: sticky;
+    top: 0;
+}
+
+tr:nth-child(even) { background:#f2f2f2; }
+
+footer {
+    text-align:center;
+    padding:15px;
+    background-color:#0b3d2e;
+    color:white;
+    margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<h1>🕌 मदीना मस्जिद सिरसिया नं.3</h1>
+<p style="text-align:center;">देवरिया, उत्तर प्रदेश</p>
+
+<h2>Online Record Checker</h2>
+
+<!-- Controls -->
+<div id="topControls">
+    <input type="text" id="numberInput" placeholder="Enter Name / Number / Mobile">
+    
+    <select id="yearSelect">
+        <option value="">All Years</option>
+    </select>
+
+    <button onclick="filterRecords()">Show Record</button>
+    <button onclick="goHome()">🏠 Home</button>
+</div>
+
+<!-- Table -->
+<div id="recordsContainer"></div>
+
+<!-- Google Map -->
+<div style="text-align:center; margin-top:20px;">
+<iframe 
+  src="https://www.google.com/maps?q=Deoria%20Uttar%20Pradesh&output=embed"
+  width="90%" height="250" style="border:0;" allowfullscreen>
+</iframe>
+</div>
+
+<footer>© 2026 मदीना मस्जिद सिरसिया नं.3</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<script>
+let csvData = [];
+const CSV_URL = "records.csv";
+
+// Load CSV
+Papa.parse(CSV_URL, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results){
+        csvData = results.data;
+        populateYearOptions();
+    },
+    error: function(err){
+        alert("Error loading CSV: " + err);
+    }
+});
+
+// Year dropdown
+function populateYearOptions(){
+    const years = [...new Set(csvData.map(r=>r.Year))].sort();
+    const yearSelect = document.getElementById('yearSelect');
+
+    years.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+    });
+}
+
+// Filter records (SMART SEARCH)
+function filterRecords(){
+    const input = document.getElementById('numberInput').value.trim().toLowerCase();
+    const selectedYear = document.getElementById('yearSelect').value;
+    const container = document.getElementById('recordsContainer');
+    container.innerHTML = "";
+
+    let filtered = csvData;
+
+    if(input){
+        filtered = filtered.filter(r => 
+            (r.Number && r.Number.includes(input)) ||
+            (r.Mobile && r.Mobile.includes(input)) ||
+            (r.Name && r.Name.toLowerCase().includes(input))
+        );
+    }
+
+    if(selectedYear){
+        filtered = filtered.filter(r => r.Year === selectedYear);
+    }
+
+    if(filtered.length === 0){
+        container.innerHTML = "<p style='text-align:center;'>No records found</p>";
+        return;
+    }
+
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    const table = document.createElement('table');
+
+    const thead = document.createElement('thead');
+    const trHead = document.createElement('tr');
+
+    ["Number","Name","Mobile","Year", ...months, "Jama","Baki","Advance"].forEach(h=>{
+        const th = document.createElement('th');
+        th.textContent = h;
+        trHead.appendChild(th);
+    });
+
+    thead.appendChild(trHead);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    filtered.forEach(row=>{
+        const tr = document.createElement('tr');
+
+        tr.appendChild(td(row.Number));
+        tr.appendChild(td(row.Name));
+        tr.appendChild(td(row.Mobile));
+        tr.appendChild(td(row.Year));
+
+        months.forEach(m => tr.appendChild(td(row[m] || "")));
+
+        tr.appendChild(td(row.Jama || ""));
+        tr.appendChild(td(row.Baki || ""));
+        tr.appendChild(td(row.Advance || ""));
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
+function td(val){
+    const cell = document.createElement('td');
+    cell.textContent = val;
+    return cell;
+}
+
+// Home button
+function goHome(){
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
